@@ -280,13 +280,8 @@ struct card * AddMoney(struct card * cardHead){
         r -> type = 1;
         r -> price = m;
         r -> next = NULL;
-        int S,s;
-        printf("Enter the Bank_num:");
-        scanf("%d",&S);
-        printf("Enter the ATM_num:");
-        scanf("%d",&s);
-        r -> store = S;
-        r -> shop = s;
+        printf("Enter the Bank_num and ATM_num:");
+        scanf("%d %d",&(r -> store),&(r -> shop));
         r -> next = NULL;
         struct tm *c;
         time_t t = time(0);
@@ -314,6 +309,12 @@ struct card * Canteen(struct card * cardHead){
         struct Money m;
         printf("Enter the money:");
         scanf("%d",&m.yuan);scanf("%d",&m.jiao);scanf("%d",&m.fen);
+        if(m.yuan > 50 || (m.yuan == 50 && m.jiao > 0) || (m.yuan == 50 && m.fen > 0)){
+            printf("Most 50 once,want more try twice.");
+            m.yuan = 50;
+            m.jiao = 0;
+            m.fen = 0;
+        }
         p -> balance = moneySub((p -> balance),m);
         if(n / 100 > 10 && m.yuan >= 20) p -> balance.yuan += 5;
         struct record * q = p -> listHead;
@@ -322,13 +323,8 @@ struct card * Canteen(struct card * cardHead){
         r -> type = 2;
         r -> price = m;
         r -> next = NULL;
-        int S,s;
-        printf("Enter the Canteen_num:");
-        scanf("%d",&S);
-        printf("Enter the Window_num:");
-        scanf("%d",&s);
-        r -> store = S;
-        r -> shop = s;
+        printf("Enter the Canteen_num and Window_num:");
+        scanf("%d %d",&(r -> store),&(r -> shop));
         r -> next = NULL;
         struct tm *c;
         time_t t = time(0);
@@ -552,16 +548,20 @@ void Bathroom(struct card * cardHead){
         r -> time.hour = c -> tm_hour;
         r -> time.minute = c -> tm_min;
         r -> time.second = c -> tm_sec;
+        printf("Enter the bathroom and tap:");
+        scanf("%d %d",&(r -> store),&(r -> shop));
+        r -> next = NULL;
         int w = 1;
         double a;
         printf("Enter the mount of water,2f:");
         scanf("%lf",&a);
         if(a > 1) w = a;
         w /= 2;
+        r -> price.yuan = (int)w;
+        r -> price.jiao = (int)((w - (r -> price.yuan)) * 10);
+        r -> price.fen = (int)((w - (r -> price.yuan) - (r -> price.jiao)) * 100);
         if((n / 100) != 10){
-            r -> price.yuan = (int)w;
-            r -> price.jiao = (int)((w - (r -> price.yuan)) * 10);
-            r -> price.fen = (int)((w - (r -> price.yuan) - (r -> price.jiao)) * 100);
+            p -> balance = moneySub((p -> balance),(r -> price));
         }else{
             if((r -> time.month) != (q -> time.month)){
                 p -> wash_ticket.yuan = 100;
@@ -581,6 +581,7 @@ void Bathroom(struct card * cardHead){
                 p -> wash_ticket.fen = 0;
             }
         }
+        q -> next = r;
     }
 }
 int main(void){
