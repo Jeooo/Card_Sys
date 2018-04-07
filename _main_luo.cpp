@@ -79,10 +79,10 @@ struct card * createCardList (void){
     cardHead -> next = NULL;
     cardHead -> listHead = (struct record* )malloc(sizeof(struct record));
     cardHead -> listHead -> type = 0;
-    cardHead -> listHead -> time.year = cardHead -> listHead -> time.month = cardHead -> listHead -> time.day = cardHead -> listHead -> time.hour = cardHead -> listHead -> time.minute = cardHead -> listHead -> time.second = 0;
+    cardHead -> listHead -> time.year =0; cardHead -> listHead -> time.month = cardHead -> listHead -> time.day = cardHead -> listHead -> time.hour = cardHead -> listHead -> time.minute = cardHead -> listHead -> time.second = 0;
     cardHead -> listHead -> store = 0;
     cardHead -> listHead -> shop = 0;
-    cardHead -> listHead -> price.yuan = cardHead -> listHead -> price.jiao = cardHead -> listHead -> price.fen = 0;
+    cardHead -> listHead -> price.yuan =30; cardHead -> listHead -> price.jiao = cardHead -> listHead -> price.fen = 0;
     cardHead -> listHead -> next = NULL;
     struct card * p = cardHead;
     struct card * q = cardHead;
@@ -92,12 +92,12 @@ struct card * createCardList (void){
         if(i < 30)p -> number = 1001 + i;//st
         else if((30 <= i) && (i < 60))p -> number = 1071 + i;//te
         else p -> number = 1141 + i;//zg
-        p -> balance.yuan = cardHead -> balance.jiao = cardHead -> balance.fen = 0;
-        p -> wash_ticket = 0;
+		p -> balance.yuan = cardHead -> balance.jiao = cardHead -> balance.fen = 0;
+        p -> wash_ticket = 0; 
         p -> next = NULL;
         p -> listHead = (struct record* )malloc(sizeof(struct record));
-        p -> listHead -> type = 1;
-        p -> listHead -> time.year = cardHead -> listHead -> time.month = cardHead -> listHead -> time.day = cardHead -> listHead -> time.hour = cardHead -> listHead -> time.minute = cardHead -> listHead -> time.second = 0;
+        p -> listHead -> type = 2;
+        p -> listHead -> time.year =0; cardHead -> listHead -> time.month = cardHead -> listHead -> time.day = cardHead -> listHead -> time.hour = cardHead -> listHead -> time.minute = cardHead -> listHead -> time.second = 0;
         p -> listHead -> store = 0;
         p -> listHead -> shop = 0;
         p -> listHead -> price.yuan = 30;cardHead -> listHead -> price.jiao = cardHead -> listHead -> price.fen = 0;
@@ -415,9 +415,48 @@ void Bathroom(struct card * cardHead){
         r -> price.fen = (int)((w - (r -> price.yuan) - (r -> price.jiao)) * 100);
                
     }
-    
-    
 }
+void search( card* s )
+{
+	int sam;
+	card  *p1 = s,p2;
+	printf("please enter the number you want to search:\n");
+	scanf("%d",&sam);
+	for(;sam != p1->number;p1 = p1->next)
+	{}//find p position
+	if(p1!=NULL)
+	{
+		record* p= (p1->listHead);
+		do{
+			
+			int n=p->type;
+			switch(n)
+			{
+				case 0:
+					printf("test cost %f yuan in %d %d %d %d %d\n",get_money(p),p->time.year,p->time.month,p->time.day,p->time.hour,p->time.minute);
+					break;
+				case 1:
+					printf("save %f yuan  in %d %d %d %d %d\n",get_money(p),p->time.year,p->time.month,p->time.day,p->time.hour,p->time.minute);
+					break;
+				case 2:
+					printf("cost %f yuan at canteen%d in %d %d %d %d %d\n",get_money(p),p->store,p->time.year,p->time.month,p->time.day,p->time.hour,p->time.minute);
+					break;
+				case 3:
+					printf("cost %f yuan at supermarket%d in %d %d %d %d %d\n",get_money(p),p->store,p->time.year,p->time.month,p->time.day,p->time.hour,p->time.minute);	
+				    break;
+				case 4:
+					printf("cost %f yuan at bathroom%d in %d %d %d %d %d\n",get_money(p),p->store,p->time.year,p->time.month,p->time.day,p->time.hour,p->time.minute);
+					break;
+				default:		
+					printf("useless\n");
+					break;
+			}
+			p =p->next;
+		}while (p!=NULL);
+	}
+	
+}
+    
 void statistics(card* s){//task 5
 	card* p=s;
 	record* m=s->listHead;
@@ -434,6 +473,7 @@ void statistics(card* s){//task 5
 int main(){
 	card* test=createCardList();
 	get_subsidy(test);
+	search(test);
 	return 0;
 }
 
